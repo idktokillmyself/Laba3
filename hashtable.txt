@@ -1,0 +1,17 @@
+4 16
+1 apple 5 
+0 
+0 
+2 banana 8 date 12 
+0 
+0 
+0 
+1 elderberry 7 
+0 
+0 
+0 
+0 
+0 
+0 
+0 
+0 

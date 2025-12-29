@@ -1,0 +1,33 @@
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -I./include -O0 -g -fprofile-arcs -ftest-coverage
+TARGET = lab3_coverage
+SOURCES = src/AVLTree.cpp src/main_final.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+GCOV_FILES = $(SOURCES:.cpp=.gcno) $(SOURCES:.cpp=.gcda)
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	./$(TARGET)
+
+coverage: run
+	gcov $(SOURCES)
+	lcov --capture --directory . --output-file coverage.info
+	genhtml coverage.info --output-directory coverage_report
+
+html-report: coverage
+	echo "HTML отчет создан в папке coverage_report"
+	xdg-open coverage_report/index.html 2>/dev/null || open coverage_report/index.html 2>/dev/null || echo "Откройте coverage_report/index.html в браузере"
+
+clean:
+	rm -f $(OBJECTS) $(TARGET) $(GCOV_FILES) *.gcov coverage.info
+	rm -rf coverage_report
+	rm -f *.txt *.bin
+
+.PHONY: all clean run coverage html-report
